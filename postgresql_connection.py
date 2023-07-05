@@ -4,6 +4,7 @@ from psycopg2 import DatabaseError
 from configparser import ConfigParser
 from string import Template
 
+
 def read_db_config(filename='dbconfig.ini', section='postgresql'):
     """ 读取数据库配置文件，返回一个字典对象
     """
@@ -22,8 +23,8 @@ def read_db_config(filename='dbconfig.ini', section='postgresql'):
     print(db)
     return db
 
-def getMVTSQL(z,x,y):
-    
+
+def get_mvt(z, x, y):
     db_config = read_db_config()
     connection = None
     db_version = None
@@ -34,16 +35,16 @@ def getMVTSQL(z,x,y):
         print(connection)
         # 创建一个游标
         cur = connection.cursor()
-        
-        sql=Template("select * from vector_tile_test(${z}, ${x}, ${y});")
-        
-        sql = sql.safe_substitute(z=z,x=x,y=y)
-        
-        print('sql:',sql)
+
+        sql = Template("select * from vector_tile_test(${z}, ${x}, ${y});")
+
+        sql = sql.safe_substitute(z=z, x=x, y=y)
+
+        print('sql:', sql)
 
         # 获取 PostgreSQL 版本号
         cur.execute(sql)
-        print('cur',cur)
+        print('cur', cur)
         db_version = cur.fetchone()[0].tobytes()
 
         # 输出 PostgreSQL 版本
